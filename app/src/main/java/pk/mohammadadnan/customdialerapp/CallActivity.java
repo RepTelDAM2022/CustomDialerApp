@@ -37,8 +37,6 @@ public class CallActivity extends AppCompatActivity {
     private TextView textDisplayName;
 
 
-    private BroadcastReceiver  broadcastReceiver
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
