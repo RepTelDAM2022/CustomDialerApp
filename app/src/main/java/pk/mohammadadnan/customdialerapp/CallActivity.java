@@ -2,6 +2,7 @@ package pk.mohammadadnan.customdialerapp;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +36,9 @@ public class CallActivity extends AppCompatActivity {
     private ImageView buttonHangup;
     private TextView textDisplayName;
 
+
+    private BroadcastReceiver  broadcastReceiver
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,12 +59,25 @@ public class CallActivity extends AppCompatActivity {
                 CallManager.cancelCall();
             }
         });
-        buttonAnswer.setOnClickListener(new View.OnClickListener() {
+//        buttonAnswer.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                CallManager.acceptCall();
+//            }
+//        });
+
+        new CountDownTimer(3000, 1000){
             @Override
-            public void onClick(View view) {
+            public void onTick(long millisUntilFinished) {
                 CallManager.acceptCall();
             }
-        });
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
+
     }
 
     @Override
