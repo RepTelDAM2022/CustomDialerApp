@@ -10,6 +10,8 @@ import android.telecom.Call;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -20,7 +22,7 @@ import java.util.Locale;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 
-public class CallManager {
+public class CallManager extends AppCompatActivity {
 
     private static final String TAG = "CallManager";
 
@@ -72,15 +74,15 @@ public class CallManager {
                 mPlayer.setDataSource(mFileName);
                 mPlayer.prepare();
                 mPlayer.start();
+                annonceDuration = mPlayer.getDuration(); //resultat en millis
+                Log.i(TAG, "annonceDuration: " + annonceDuration);
                 Log.i(TAG, "acceptCall: Media player is playing file = " + mFileName + " annonce duration = " + annonceDuration);
             } catch (IOException e) {
                 Log.i(TAG, "playAudio: failed");
              }
         }
 
-        annonceDuration = mPlayer.getDuration(); //resultat en millis
-        Log.i(TAG, "annonceDuration: " + annonceDuration);
-
+        Log.i(TAG, "acceptCall: juste avant le demarrage du countdown");
         new CountDownTimer(annonceDuration, 1000){
             @Override
             public void onTick(long millisUntilFinished) {startCallRecording();}
@@ -93,7 +95,7 @@ public class CallManager {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.FRANCE);
         String time =  dateFormat.format(new Date()) ;
 
-        Log.i(TAG, "onTick: je commence l'enregistrement");
+        Log.i(TAG, "startCallRecording: je commence l'enregistrement");
 
         recorder = new MediaRecorder();
         recorder.setAudioSamplingRate(8000);
@@ -107,11 +109,15 @@ public class CallManager {
 
         try {
             recorder.prepare();
+            Log.i(TAG, "recorder.prepare");
         } catch (IllegalStateException e) {
             e.printStackTrace();
+            Log.i(TAG, "catch illegalStateException: " + e);
         } catch (IOException e) {
             e.printStackTrace();
+            Log.i(TAG, "catch IOException: " + e);
         }
+        Log.i(TAG, "recorder.start");
         recorder.start();
         recordStarted = true;
 
