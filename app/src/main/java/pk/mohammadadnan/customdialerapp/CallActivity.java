@@ -78,10 +78,7 @@ public class CallActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFinish() {
-
-            }
-        }.start();
+            public void onFinish() {} }.start();
 
     }
 
