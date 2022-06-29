@@ -1,8 +1,12 @@
 package pk.mohammadadnan.customdialerapp;
 
+import static android.content.ContentValues.TAG;
+
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -35,6 +40,8 @@ public class CallActivity extends AppCompatActivity {
     private ImageView buttonAnswer;
     private ImageView buttonHangup;
     private TextView textDisplayName;
+    private static String mFileName = null;
+    private MediaPlayer mPlayer;
 
 
     @Override
