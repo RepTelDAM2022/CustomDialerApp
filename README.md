@@ -1,10 +1,15 @@
 # java-custom-dialer
 
 Note de Charbel.
+
 Dans cette application je cherche et test comment
-1 - ouvrire la ligne quand un appel arive
+
+1 - ouvrire la ligne quand un appel arrive
+
 2 - lire l'annonce ou message d'acceuil sachant que Android ne le permet pas donc il faut trouver une solution
+
 3 - demarrer l'enregistrement de l'appel entrant (le message)
+
 4 - le mettre dans la base de donnees et dans un repertoire local créé à partir du numéro de téléphone entrant.
 
 
