@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -92,20 +94,21 @@ public class CallManager extends AppCompatActivity {
     }
 
     private static void startCallRecording() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.FRANCE);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.FRANCE);
         String time =  dateFormat.format(new Date()) ;
 
         Log.i(TAG, "startCallRecording: je commence l'enregistrement");
 
         final Handler handler = new Handler();
+
         recorder = new MediaRecorder();
-        //recorder.setAudioSamplingRate(8000);
-        recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
+        recorder.setAudioSamplingRate(8000);
+        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.OGG);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        recorder.setOutputFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/RepTel/M" + time);
+        recorder.setOutputFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/RepTel/M" + time + ".ogg");
 
-        Log.i(TAG, "enregistrement : " + Environment.getExternalStorageDirectory().getAbsolutePath() + "/RepTel/M" + time);
+        Log.i(TAG, "enregistrement : " + Environment.getExternalStorageDirectory().getAbsolutePath() + "/RepTel/M" + time + ".ogg");
         Log.i(TAG, "enregistrement de l'appel dans : " + recorder.toString() );
 
         try {
@@ -119,7 +122,7 @@ public class CallManager extends AppCompatActivity {
             Log.i(TAG, "catch IOException: " + e);
         }
         Log.i(TAG, "recorder.start");
-        recorder.start();
+//        recorder.start();
         recordStarted = true;
         handler.postDelayed(new Runnable() {
             @Override
@@ -129,7 +132,7 @@ public class CallManager extends AppCompatActivity {
                 recordStarted=false;
                 Log.i(TAG, "run: recorder stop");
             }
-        }, 30000);
+        }, 10000);
 
     }
 
