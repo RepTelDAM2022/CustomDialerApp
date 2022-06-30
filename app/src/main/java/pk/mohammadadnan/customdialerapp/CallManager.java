@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.CountDownTimer;
 import android.os.Environment;
+import android.os.Handler;
 import android.telecom.Call;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -30,7 +31,6 @@ public class CallManager extends AppCompatActivity {
     private static Call currentCall = null;
     public static CallManager INSTANCE;
     private static MediaRecorder recorder;
-    private static String mFileName = null;
     private static String savedNumber;
     private static boolean recordStarted = false;
     static long annonceDuration;
@@ -68,22 +68,22 @@ public class CallManager extends AppCompatActivity {
         if (call != null) {
             call.answer(call.getDetails().getVideoState());
             Log.i(TAG, "acceptCall: je suis dans le accept call");
-            mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
+            String mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
             mFileName += "/RepTel/Annonce.3gp";
-            try {
-                mPlayer.setDataSource(mFileName);
-                mPlayer.prepare();
-                mPlayer.start();
-                annonceDuration = mPlayer.getDuration(); //resultat en millis
-                Log.i(TAG, "annonceDuration: " + annonceDuration);
-                Log.i(TAG, "acceptCall: Media player is playing file = " + mFileName + " annonce duration = " + annonceDuration);
-            } catch (IOException e) {
-                Log.i(TAG, "playAudio: failed");
-             }
+//            try {
+//                mPlayer.setDataSource(mFileName);
+//                mPlayer.prepare();
+//                mPlayer.start();
+//                annonceDuration = mPlayer.getDuration(); //resultat en millis
+//                Log.i(TAG, "annonceDuration: " + annonceDuration);
+//                Log.i(TAG, "acceptCall: Media player is playing file = " + mFileName + " annonce duration = " + annonceDuration);
+//            } catch (IOException e) {
+//                Log.i(TAG, "playAudio: failed");
+//             }
         }
 
         Log.i(TAG, "acceptCall: juste avant le demarrage du countdown");
-        new CountDownTimer(annonceDuration, 1000){
+        new CountDownTimer(4000, 1000){
             @Override
             public void onTick(long millisUntilFinished) {startCallRecording();}
             @Override
@@ -97,10 +97,11 @@ public class CallManager extends AppCompatActivity {
 
         Log.i(TAG, "startCallRecording: je commence l'enregistrement");
 
+        final Handler handler = new Handler();
         recorder = new MediaRecorder();
-        recorder.setAudioSamplingRate(8000);
+        //recorder.setAudioSamplingRate(8000);
         recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.OGG);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
         recorder.setOutputFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/RepTel/M" + time);
 
@@ -120,6 +121,15 @@ public class CallManager extends AppCompatActivity {
         Log.i(TAG, "recorder.start");
         recorder.start();
         recordStarted = true;
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                recorder.stop();
+                recorder.release();
+                recordStarted=false;
+                Log.i(TAG, "run: recorder stop");
+            }
+        }, 30000);
 
     }
 
